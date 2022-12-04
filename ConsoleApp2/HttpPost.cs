@@ -20,7 +20,7 @@ namespace ConsoleApp2
         //    //StringContent stringcontent = new StringContent(content);
         //    //using var request = new HttpRequestMessage(HttpMethod.Post, address);
         //    //request.Content = stringcontent;
-            
+
         //    //using var response = await httpClient.SendAsync(request);
         //    //string responseText = await response.Content.ReadAsStringAsync();
 
@@ -34,11 +34,27 @@ namespace ConsoleApp2
         //    //    Console.WriteLine(str);
         //    //    Console.ReadKey();
         //    //}
+
         //}
+
+
+        public static async Task<HttpResponseMessage> HttpPostReq(string Url, string Data)
+        {
+            StringContent content = new StringContent(Data);
+            using var request = new HttpRequestMessage(HttpMethod.Post, Url);
+            request.Content = content;
+            return await client.SendAsync(request);
+           // string responseText = await response.Content.ReadAsStringAsync();
+
+        }
+
+
+        private static readonly HttpClient client = new HttpClient();
         public static string POST(string Url, string Data)
         {
             try
             {
+
                 WebRequest req = WebRequest.Create(Url);
                 req.Method = "POST";
                 req.Timeout = 100000;
@@ -75,7 +91,7 @@ namespace ConsoleApp2
                 }
                 return Out;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Ошибка при выполнее post запроса" + ex.ToString());
             }

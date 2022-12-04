@@ -3,7 +3,7 @@ using ConsoleApp2;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-
+using System.Threading.Tasks;
 
 Logger logger = LogManager.GetCurrentClassLogger();
 string imageadress="";
@@ -46,11 +46,15 @@ catch (Exception ex)
     logger.Error("Ошибка создания строки- " + ex.ToString());
 
 }
-JObject jsonobj= new JObject();
+//JObject jsonobj= new JObject();
+HttpResponseMessage postresponse = new HttpResponseMessage();
 try
 {
-    string answer = HttpPost.POST(testhttpaddress, base64imagestring);
-    jsonobj = JObject.Parse(answer);
+    //string answer = HttpPost.POST(testhttpaddress, base64imagestring);
+    //jsonobj = JObject.Parse(answer);
+    postresponse  =  await HttpPost.HttpPostReq(testhttpaddress, base64imagestring);
+   // jsonobj = JObject.Parse(postresponse.ToString());
+
 }
 catch (Exception ex)
 {
@@ -60,22 +64,27 @@ catch (Exception ex)
 try
 {
     string jsonfile = AppDomain.CurrentDomain.BaseDirectory + "jsonfile.txt";
+
     //File.Create(jsonfile);
-    //File.WriteAllText(jsonfile, jsonobj.ToString());
+    File.AppendAllText(jsonfile, postresponse.ToString());
+
+    //File.WriteAllText(jsonfile, postresponse.ToString());
     //using (FileStream fstream = new FileStream(jsonfile, FileMode.OpenOrCreate))
     //{
-    //    fstream.wrwriteall
-
+    //    fstream.Write(input, 0, input.Length);
     //}
-    using (StreamWriter file = File.CreateText(@jsonfile))
-    using (JsonTextWriter writer = new JsonTextWriter(file))
-    {
-        jsonobj.WriteTo(writer);
-    }
+
+
+    //using (StreamWriter file = File.CreateText(@jsonfile))
+    //using (JsonTextWriter writer = new JsonTextWriter(file))
+    //{
+    //    jsonobj.WriteTo(writer);
+    //}
 
 }
 catch (Exception ex)
 {
+    logger.Error("Ошибка post запроса " + ex.ToString());
 
 }
 
