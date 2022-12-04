@@ -13,10 +13,13 @@ Console.WriteLine("Введите адрес изображения");
 
 try
 {
-    // imageadress = Console.ReadLine();
-    //logger.Info("Веденный путь: " imageadress);
+    imageadress = Console.ReadLine();
+    logger.Info("Веденный путь: " + imageadress);
+    if (!File.Exists(imageadress))
+    {
 
-     imageadress = "F:\\dotNetCore\\TestConsoleApp\\ConsoleApp2\\file.png"; //Console.ReadLine();
+        throw new Exception("Указанного файла не существует или путь введен некорректно.");
+    }    
 
 }
 catch(Exception ex)
@@ -46,14 +49,10 @@ catch (Exception ex)
     logger.Error("Ошибка создания строки- " + ex.ToString());
 
 }
-//JObject jsonobj= new JObject();
 HttpResponseMessage postresponse = new HttpResponseMessage();
 try
 {
-    //string answer = HttpPost.POST(testhttpaddress, base64imagestring);
-    //jsonobj = JObject.Parse(answer);
     postresponse  =  await HttpPost.HttpPostReq(testhttpaddress, base64imagestring);
-   // jsonobj = JObject.Parse(postresponse.ToString());
 
 }
 catch (Exception ex)
@@ -64,22 +63,12 @@ catch (Exception ex)
 try
 {
     string jsonfile = AppDomain.CurrentDomain.BaseDirectory + "jsonfile.txt";
-
-    //File.Create(jsonfile);
     File.AppendAllText(jsonfile, postresponse.ToString());
-
-    //File.WriteAllText(jsonfile, postresponse.ToString());
-    //using (FileStream fstream = new FileStream(jsonfile, FileMode.OpenOrCreate))
-    //{
-    //    fstream.Write(input, 0, input.Length);
-    //}
+    File.AppendAllText(jsonfile, HttpPost.ResponseJson.ToString());
+    logger.Info(postresponse.ToString());
+    logger.Info(HttpPost.ResponseJson.ToString());
 
 
-    //using (StreamWriter file = File.CreateText(@jsonfile))
-    //using (JsonTextWriter writer = new JsonTextWriter(file))
-    //{
-    //    jsonobj.WriteTo(writer);
-    //}
 
 }
 catch (Exception ex)

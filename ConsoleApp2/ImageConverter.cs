@@ -11,7 +11,6 @@ namespace ConsoleApp2
 {
     internal class ImageConverter
     {
-        //Logger logger = LogManager.GetCurrentClassLogger();
 
         internal static void ConvertImage(string path,string nameofresuldetfile)
         {                    
@@ -20,12 +19,11 @@ namespace ConsoleApp2
                 using (Bitmap bitmap = new Bitmap(path))
                 {
                     bitmap.Save(nameofresuldetfile, ImageFormat.Jpeg);
-                    //logger.Info("Файл успешно создан");
                 }               
             }
             catch (Exception ex)
             {
-                //logger.Error("Ошибка конвертация графического файла - " + ex.ToString());
+                throw new Exception("Ошибка при конвертации изображения" + ex.ToString());
             }      
         }
 
